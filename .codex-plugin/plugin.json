@@ -2,7 +2,7 @@
   "name": "handwriting",
   "version": "1.0.0",
   "description": "Learn someone's real handwriting from vector-ink PDFs and write answers onto PDFs in that hand.",
-  "author": { "name": "Rujfaha" },
+  "author": { "name": "Arkkarawin Rujiprach", "url": "https://github.com/Rujfaha" },
   "repository": "https://github.com/Rujfaha/handwriting-skill",
   "skills": "./skills/"
 }

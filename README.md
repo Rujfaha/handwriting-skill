@@ -33,4 +33,4 @@ Responsible use: only learn handwriting you own or have permission to use; do no
 
 ## Credits
 
-Created by Arkkarawin Rujiprach, Pechra Schlr, CPE, KMUTT
+Created by Arkkarawin Rujiprach, Petchra Pra Jom Klao Scholarship, Computer Engineering (CPE), King Mongkut's University of Technology Thonburi (KMUTT)
