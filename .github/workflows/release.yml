@@ -1,0 +1,23 @@
+# Builds the public skill zip (no profiles) on every push so the "latest" download links always work.
+name: release
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  pack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install pymupdf
+      - run: |
+          python skills/handwriting/scripts/hw.py selftest
+          python skills/handwriting/scripts/hw.py pack dist/handwriting.skill --public
+          cp dist/handwriting.skill dist/handwriting.zip
+      - env: { GH_TOKEN: '${{ github.token }}' }
+        run: |
+          gh release view latest >/dev/null 2>&1 || gh release create latest --title "Latest skill" --notes "Upload handwriting.zip in Claude Settings > Capabilities > Skills."
+          gh release upload latest dist/handwriting.skill dist/handwriting.zip --clobber

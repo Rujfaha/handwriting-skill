@@ -11,6 +11,8 @@ and write new text onto PDFs with them. Strokes are copied 1:1 (only scaled), so
                                                      bake one glyph variant (ids: 12 or 12,13) into the profile
   hw.py palette <profile> [text] [out.png]           draw every glyph (or a sample text) to check the profile
   hw.py write <profile> <job.json> <in.pdf> <out.pdf>   write answer blocks onto a PDF
+  hw.py pack [out.skill] [--public]                  zip the skill + your profiles for Claude.ai/Desktop/mobile
+                                                     (Settings > Capabilities > Skills > Upload); --public = no profiles
   hw.py selftest                                     tiny assert-based check
 
 Needs: python 3.9+, PyMuPDF (pip install pymupdf). Pillow only for gallery/palette.
@@ -269,6 +271,23 @@ def cmd_palette(prof, text=None, out='palette.png'):
     if pen.missing: print('missing glyphs:', sorted(pen.missing))
     page.get_pixmap(dpi=150, clip=pymupdf.Rect(0, 0, 612, min(792, pen.base + 30))).save(out); print(out)
 
+def cmd_pack(*args):
+    """skill folder (+ bundled and learned profiles unless --public) -> one zip that Claude.ai accepts as a skill."""
+    import zipfile
+    pub = '--public' in args; pos = [x for x in args if x != '--public']; out = pos[0] if pos else 'handwriting.skill'
+    root = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+    files = {'SKILL.md': os.path.join(root, 'SKILL.md'), 'scripts/hw.py': os.path.abspath(__file__)}
+    for base in ([] if pub else [os.path.normpath(SKILL_DIR), USER_DIR]):   # later base wins: learned beats bundled
+        for n in (sorted(os.listdir(base)) if os.path.isdir(base) else []):
+            d = os.path.join(base, n)
+            for f in (os.listdir(d) if os.path.isdir(d) else []):
+                if f.endswith(('.json', '.md')): files[f'profiles/{n}/{f}'] = os.path.join(d, f)
+    os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
+    with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED) as z:
+        for arc, src in files.items(): z.write(src, 'handwriting/' + arc)
+    profs = sorted({a.split('/')[1] for a in files if a.startswith('profiles/')})
+    print(out, os.path.getsize(out) // 1024, 'KB, profiles:', ', '.join(profs) or 'none')
+
 def selftest():
     doc = pymupdf.open(); pg = doc.new_page(); sh = pg.new_shape()
     sh.draw_bezier((10, 20), (12, 10), (16, 10), (18, 20)); sh.finish(color=(0, 0.2, 0.6), width=0.8); sh.commit()
@@ -281,6 +300,9 @@ def selftest():
     assert pen.missing == {'q'}, pen.missing
     r = pymupdf.Rect(); [r.include_rect(d['rect']) for d in page.get_drawings()]
     assert abs(r.y1 - 100) < 0.6 and abs(r.height - 4.0) < 0.8, r  # scaled to h, sits on baseline
+    import tempfile, zipfile
+    t = os.path.join(tempfile.mkdtemp(), 'h.skill'); cmd_pack(t, '--public'); names = zipfile.ZipFile(t).namelist()
+    assert 'handwriting/SKILL.md' in names and 'handwriting/scripts/hw.py' in names and not any('/profiles/' in n for n in names), names
     print('selftest ok')
 
 if __name__ == '__main__':
@@ -300,4 +322,4 @@ if __name__ == '__main__':
         cmd_add(*pos, **kw)
     else:
         {'list': cmd_list, 'new': cmd_new, 'scan': cmd_scan, 'gallery': cmd_gallery, 'sheet': cmd_sheet, 'palette': cmd_palette,
-         'write': cmd_write, 'selftest': selftest}[c](*rest)
+         'write': cmd_write, 'pack': cmd_pack, 'selftest': selftest}[c](*rest)

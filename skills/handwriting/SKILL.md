@@ -20,6 +20,17 @@ Profiles: `hw.py list`. The user's learned profiles live in `~/.handwriting/prof
 (survive plugin updates). Bundled ones live in `profiles/` here. Each profile folder may have a `style.md`:
 **read it before writing**; it says how that person phrases answers.
 
+## Claude.ai web, Desktop, mobile (sandbox, no local disk)
+
+- Setup once per chat: `pip install pymupdf pillow` (add `--break-system-packages` if pip refuses). Run the
+  script from this skill's folder (e.g. `/mnt/skills/user/handwriting/scripts/hw.py`) with `python3`.
+- The user's PDFs are in `/mnt/user-data/uploads/`; write results (filled PDF, PNG previews) to
+  `/mnt/user-data/outputs/` and present them so the user can download them.
+- The sandbox forgets `~/.handwriting` when the chat ends. After learning or changing a profile, run
+  `hw.py pack /mnt/user-data/outputs/handwriting.skill`, present that file and tell the user to save it
+  ("Save skill" button, or Settings > Capabilities > Skills > Upload). That replaces this skill with one that
+  carries their profile, on every device.
+
 ## Learn (`/handwriting:learn <pdf> [more pdfs] [profile name]`)
 
 1. `hw.py scan <pdf>` for each file. Only pages marked VECTOR INK can be learned. A scanned or photographed

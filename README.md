@@ -7,6 +7,20 @@ Requires Python 3.9+ with `pip install pymupdf pillow`.
 
 ## Install
 
+**Claude.ai web, Desktop app, mobile** (one skill, synced to all of them):
+
+1. Download the skill: https://github.com/Rujfaha/handwriting-skill/releases/latest/download/handwriting.zip
+2. Claude Settings > Capabilities > Skills > Upload skill, pick the zip. (Turn on "Code execution" there too.)
+
+Or paste this into any chat with code execution on and save the file Claude hands back:
+```
+Install this skill for me: download https://github.com/Rujfaha/handwriting-skill/releases/latest/download/handwriting.skill
+and present the file so I can save it as a skill.
+```
+Then "learn my handwriting from this PDF" / "fill this PDF in my handwriting". After learning, Claude gives you
+an updated `handwriting.skill` that contains your profile; save it so the profile is kept on every device.
+From Claude Code you can build that personal file yourself: `python hw.py pack my-handwriting.skill`.
+
 **Claude Code**:
 ```
 claude plugin marketplace add <path-or-github-url>
