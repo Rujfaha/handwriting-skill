@@ -1,0 +1,9 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "handwriting",
+  "description": "Learn handwriting from PDFs and write in it.",
+  "owner": { "name": "Rujfaha" },
+  "plugins": [
+    { "name": "handwriting", "description": "Learn handwriting from PDFs and write in it.", "source": "./", "category": "productivity" }
+  ]
+}

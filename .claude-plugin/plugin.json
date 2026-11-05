@@ -1,0 +1,8 @@
+{
+  "name": "handwriting",
+  "version": "1.0.0",
+  "description": "Learn someone's real handwriting from vector-ink PDFs (Goodnotes etc.) and write answers onto PDFs in that hand..",
+  "author": { "name": "Rujfaha" },
+  "repository": "https://github.com/Rujfaha/handwriting-skill",
+  "keywords": ["handwriting", "pdf", "goodnotes", "homework", "ink"]
+}

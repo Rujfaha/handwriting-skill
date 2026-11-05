@@ -1,0 +1,6 @@
+skills/handwriting/profiles/*/
+skills/handwriting/examples/cpe111-relations.job.json
+__pycache__/
+*.pyc
+*.png
+*.pdf
