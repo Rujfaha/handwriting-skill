@@ -30,3 +30,7 @@ via `.codex-plugin/plugin.json`. Any agent without skills can still follow `skil
 Privacy: a profile is a copy of someone's handwriting; keep profiles out of public repos (they are gitignored).
 
 Responsible use: only learn handwriting you own or have permission to use; do not use it to forge signatures or submit work dishonestly.
+
+## Credits
+
+Created by Arkkarawin Rujiprach, Pechra Schlr, CPE, KMUTT
